@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/input_layout_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/input_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Username" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/linearLayout"
+        android:layout_below="@+id/linearLayout3"
+        android:layout_alignParentStart="true">
+
+
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="15dp"
+            android:paddingBottom="10dp"
+            android:text="Time per round (seconds)"
+            android:textSize="18sp" />
+
+        <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+            android:id="@+id/sbTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:dsb_allowTrackClickToDrag="false"
+            app:dsb_indicatorFormatter="%d Seconds"
+            app:dsb_indicatorTextAppearance="@style/CustomFloaterTextAppearance"
+            app:dsb_max="7"
+            app:dsb_min="2"
+            app:dsb_progressColor="?attr/colorPrimary" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/linearLayout2"
+        android:layout_below="@+id/linearLayout"
+        android:layout_alignParentStart="true">
+
+
+        <TextView
+            android:id="@+id/tvPlayers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="15dp"
+            android:paddingBottom="10dp"
+            android:text="Number of Players"
+            android:textSize="18sp" />
+
+        <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+            android:id="@+id/sbPlayers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:dsb_allowTrackClickToDrag="false"
+            app:dsb_indicatorFormatter="%d Players"
+            app:dsb_indicatorTextAppearance="@style/CustomFloaterTextAppearance"
+            app:dsb_max="7"
+            app:dsb_min="2"
+            app:dsb_progressColor="?attr/colorPrimary" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@+id/input_layout_username"
+            android:layout_alignParentStart="true"
+            android:id="@+id/linearLayout3">
+
+
+            <TextView
+                android:id="@+id/tvRounds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="3dp"
+                android:layout_marginTop="15dp"
+                android:paddingBottom="10dp"
+                android:text="Number of rounds"
+                android:textSize="18sp" />
+
+            <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+                android:id="@+id/sbRounds"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:dsb_allowTrackClickToDrag="false"
+                app:dsb_indicatorFormatter="%d Rounds"
+                app:dsb_indicatorTextAppearance="@style/CustomFloaterTextAppearance"
+                app:dsb_max="7"
+                app:dsb_min="2"
+                app:dsb_progressColor="?attr/colorPrimary" />
+
+        </LinearLayout>
+</RelativeLayout>
