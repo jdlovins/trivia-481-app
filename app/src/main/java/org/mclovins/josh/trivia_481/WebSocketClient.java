@@ -1,13 +1,9 @@
 package org.mclovins.josh.trivia_481;
 
-import android.content.Context;
-import android.widget.Toast;
-
 import org.greenrobot.eventbus.EventBus;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
@@ -43,7 +39,7 @@ public class WebSocketClient {
 
     static void Connect() {
 
-        Request request = new Request.Builder().url("ws://192.168.10.25:5000").build();
+        Request request = new Request.Builder().url("ws://139.84.74.38:5000").build();
         ws = client.newWebSocket(request, new WebSocketListenerInterface());
         //client.dispatcher().executorService().shutdown();
     }
@@ -63,8 +59,6 @@ public class WebSocketClient {
         @Override
         public void onOpen(WebSocket webSocket, Response response) {
             //webSocket.close(NORMAL_CLOSURE_STATUS, "Goodbye !");
-            webSocket.send("hello! its me");
-            EventBus.getDefault().post(new TestEvent());
         }
 
         @Override

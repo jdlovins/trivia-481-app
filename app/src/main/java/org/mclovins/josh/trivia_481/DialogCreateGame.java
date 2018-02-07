@@ -17,6 +17,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
+import org.greenrobot.eventbus.EventBus;
+import org.mclovins.josh.trivia_481.events.CreateGameEvent;
+
+import java.security.Key;
 
 import butterknife.BindDrawable;
 import butterknife.BindView;
@@ -31,16 +35,18 @@ public class DialogCreateGame extends AppCompatDialogFragment {
 
     @BindView(R.id.input_layout_username)
     TextInputLayout tiUsername;
+    @BindView(R.id.input_layout_room_name)
+    TextInputLayout tiRoomName;
     @BindView(R.id.input_username)
     EditText etUsername;
+    @BindView(R.id.input_room_name)
+    EditText etRoomName;
     @BindView(R.id.sbTime)
     DiscreteSeekBar sbTime;
     @BindView(R.id.sbRounds)
     DiscreteSeekBar sbRounds;
     @BindView(R.id.sbPlayers)
     DiscreteSeekBar sbPlayers;
-    private CreateGameListener listener;
-
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -67,32 +73,12 @@ public class DialogCreateGame extends AppCompatDialogFragment {
         }, 50);
 
         // Listen for enter key to check the form
-        etUsername.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (i == KeyEvent.KEYCODE_ENTER)) {
-                    CheckForm();
-                    return true;
-                }
-                return false;
-            }
-        });
+        etUsername.setOnKeyListener(KeyListener);
+        etRoomName.setOnKeyListener(KeyListener);
 
         return builder.create();
-
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        try {
-            listener = (CreateGameListener) context;
-        } catch (ClassCastException ex) {
-            throw new ClassCastException(ex.toString() + " Must implement CreateGameListener");
-        }
-    }
 
     @Override
     public void onResume() {
@@ -107,19 +93,47 @@ public class DialogCreateGame extends AppCompatDialogFragment {
         });
     }
 
+    View.OnKeyListener KeyListener = new View.OnKeyListener() {
+        @Override
+        public boolean onKey(View view, int i, KeyEvent keyEvent) {
+
+            Toast.makeText(view.getContext(), "Key: " + i + " -- Event: " + keyEvent.getAction(), Toast.LENGTH_SHORT).show();
+
+            if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) &&
+                    (i == KeyEvent.KEYCODE_ENTER)) {
+                CheckForm();
+                return true;
+            }
+            return false;
+        }
+    };
+
+
     private void CheckForm() {
+
         final AlertDialog alertDialog = (AlertDialog) getDialog();
+        boolean error = false;
+
         if (etUsername.getText().toString().trim().isEmpty()) {
             tiUsername.setError("Please set a username");
-        } else {
-            tiUsername.setErrorEnabled(false);
-            alertDialog.dismiss();
-            listener.CreateGame(etUsername.getText().toString(), sbTime.getProgress(),
-                    sbRounds.getProgress(), sbPlayers.getProgress());
+            error = true;
         }
-    }
+        else {
+            tiUsername.setErrorEnabled(false);
+        }
+        if (etRoomName.getText().toString().trim().isEmpty()) {
+            tiRoomName.setError("Please set a Room Name");
+            error = true;
+        }
+        else {
+            tiRoomName.setErrorEnabled(false);
+        }
 
-    public interface CreateGameListener {
-        void CreateGame(String Username, int Time, int Rounds, int Players);
+        if (!error) {
+            alertDialog.dismiss();
+            EventBus.getDefault().post(new CreateGameEvent(etUsername.getText().toString(),
+                    sbTime.getProgress(), sbRounds.getProgress(), sbPlayers.getProgress()));
+        }
+
     }
 }
