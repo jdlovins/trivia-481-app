@@ -7,6 +7,7 @@ package org.mclovins.josh.trivia_481.events;
 public enum EventType {
     BASE("BASE"),
     CREATE_ROOM("CREATE_ROOM"),
+    LOGIN("LOGIN")
     ;
 
     private final String text;

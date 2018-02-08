@@ -132,7 +132,8 @@ public class DialogCreateGame extends AppCompatDialogFragment {
         if (!error) {
             alertDialog.dismiss();
             EventBus.getDefault().post(new CreateGameEvent(etUsername.getText().toString(),
-                    sbTime.getProgress(), sbRounds.getProgress(), sbPlayers.getProgress()));
+                    etRoomName.getText().toString(), sbTime.getProgress(),
+                    sbRounds.getProgress(), sbPlayers.getProgress()));
         }
 
     }

@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCreateGameEvent(CreateGameEvent event) {
 
+        Log.e("Test", "We are making the game room!");
+
         WebSocketClient.Connect();
 
         WebSocketClient.Send(event.toJson());
