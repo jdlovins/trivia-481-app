@@ -4,20 +4,16 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
-
-import java.util.UUID;
 
 import com.github.clans.fab.FloatingActionMenu;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.mclovins.josh.trivia_481.events.BaseEvent;
+import org.mclovins.josh.trivia_481.dialogs.CreateGame;
+import org.mclovins.josh.trivia_481.dialogs.JoinGame;
 import org.mclovins.josh.trivia_481.events.CreateGameEvent;
-import org.mclovins.josh.trivia_481.events.EventAdapter;
+import org.mclovins.josh.trivia_481.events.JoinGameEvent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,8 +34,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.item_create_game)
-    public void OnClick() {
-        DialogCreateGame dialog = new DialogCreateGame();
+    public void OnCreateGameClick() {
+        CreateGame dialog = new CreateGame();
+        dialog.show(getSupportFragmentManager(), "tag");
+    }
+
+    @OnClick(R.id.item_join_game)
+    public void OnJoinGameClick() {
+        JoinGame dialog = new JoinGame();
         dialog.show(getSupportFragmentManager(), "tag");
     }
 
@@ -56,6 +58,18 @@ public class MainActivity extends AppCompatActivity {
         getApplicationContext().startActivity(myIntent);
 
         fabMenu.close(true);
+    }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void OnJoinGameEvent(JoinGameEvent event) {
+        Log.e("test", "We are joining the game room!");
+
+        WebSocketClient.Connect();
+        WebSocketClient.Send(event.toJson());
+
+        Intent myIntent = new Intent(getApplicationContext(), GameActivity.class);
+        getApplicationContext().startActivity(myIntent);
+
+        fabMenu.close(true);
     }
 }

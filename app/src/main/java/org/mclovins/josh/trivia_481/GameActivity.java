@@ -7,6 +7,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.mclovins.josh.trivia_481.events.BroadcastEvent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,10 +27,15 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         ButterKnife.bind(this);
-        //EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);
 
         shouldWeCloseNow = false;
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onBroadcast(BroadcastEvent event) {
+        test.setText(event.content);
     }
 
     @Override

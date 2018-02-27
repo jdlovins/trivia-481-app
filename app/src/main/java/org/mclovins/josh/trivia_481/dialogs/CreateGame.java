@@ -1,4 +1,4 @@
-package org.mclovins.josh.trivia_481;
+package org.mclovins.josh.trivia_481.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 import org.greenrobot.eventbus.EventBus;
+import org.mclovins.josh.trivia_481.R;
 import org.mclovins.josh.trivia_481.events.CreateGameEvent;
 
 import java.security.Key;
@@ -31,7 +32,7 @@ import butterknife.ButterKnife;
  * Created by Josh on 1/30/18.
  */
 
-public class DialogCreateGame extends AppCompatDialogFragment {
+public class CreateGame extends AppCompatDialogFragment {
 
     @BindView(R.id.input_layout_username)
     TextInputLayout tiUsername;

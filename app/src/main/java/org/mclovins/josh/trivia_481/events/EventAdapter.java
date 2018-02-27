@@ -18,10 +18,12 @@ public class EventAdapter implements JsonDeserializer<BaseEvent> {
 
         JsonObject jsonObject = json.getAsJsonObject();
 
-        EventType type = EventType.valueOf(jsonObject.get("Type").getAsString());
+        EventType type = EventType.valueOf(jsonObject.get("type").getAsString());
 
         if (EventType.CREATE_ROOM == type) {
             return context.deserialize(jsonObject, CreateGameEvent.class);
+        }else if (EventType.BROADCAST == type) {
+            return context.deserialize(jsonObject, BroadcastEvent.class);
         }
 
         return null;
