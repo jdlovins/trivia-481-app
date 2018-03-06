@@ -6,12 +6,12 @@ package org.mclovins.josh.trivia_481.events;
 
 public class JoinGameEvent extends BaseEvent {
 
-    public String Username;
-    public int Code;
+    public String userName;
+    public int code;
 
     public JoinGameEvent(String username, int code) {
-        this.Type = EventType.JOIN_GAME;
-        this.Username = username;
-        this.Code = code;
+        this.type = EventType.JOIN_GAME;
+        this.userName = username;
+        this.code = code;
     }
 }

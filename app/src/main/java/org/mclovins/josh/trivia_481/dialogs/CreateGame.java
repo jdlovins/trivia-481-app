@@ -98,7 +98,7 @@ public class CreateGame extends AppCompatDialogFragment {
         @Override
         public boolean onKey(View view, int i, KeyEvent keyEvent) {
 
-            Toast.makeText(view.getContext(), "Key: " + i + " -- Event: " + keyEvent.getAction(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(view.getContext(), "Key: " + i + " -- event: " + keyEvent.getAction(), Toast.LENGTH_SHORT).show();
 
             if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) &&
                     (i == KeyEvent.KEYCODE_ENTER)) {

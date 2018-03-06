@@ -9,7 +9,7 @@ import org.mclovins.josh.trivia_481.Packet;
 
 public class BaseEvent {
 
-    public EventType Type = EventType.BASE;
+    public EventType type = EventType.BASE;
 
     public String toJson() {
         return Globals.gson.toJson(new Packet(this));

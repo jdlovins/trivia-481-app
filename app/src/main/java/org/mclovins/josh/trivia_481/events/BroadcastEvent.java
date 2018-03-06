@@ -9,7 +9,7 @@ public class BroadcastEvent extends BaseEvent {
     public String content;
 
     public BroadcastEvent(String content) {
-        this.Type = EventType.BROADCAST;
+        this.type = EventType.BROADCAST;
         this.content = content;
     }
 }

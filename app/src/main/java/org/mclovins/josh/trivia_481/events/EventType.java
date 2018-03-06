@@ -6,10 +6,11 @@ package org.mclovins.josh.trivia_481.events;
 
 public enum EventType {
     BASE("BASE"),
-    CREATE_ROOM("CREATE_ROOM"),
+    CREATE_GAME("CREATE_GAME"),
     LOGIN("LOGIN"),
     BROADCAST("BROADCAST"),
-    JOIN_GAME("JOIN_GAME")
+    JOIN_GAME("JOIN_GAME"),
+    JOIN_GAME_RESPONSE("JOIN_GAME_RESPONSE")
     ;
 
     private final String text;

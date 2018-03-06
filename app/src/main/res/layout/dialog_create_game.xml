@@ -60,8 +60,8 @@
             app:dsb_allowTrackClickToDrag="false"
             app:dsb_indicatorFormatter="%d Seconds"
             app:dsb_indicatorTextAppearance="@style/CustomFloaterTextAppearance"
-            app:dsb_max="7"
-            app:dsb_min="2"
+            app:dsb_max="60"
+            app:dsb_min="20"
             app:dsb_progressColor="?attr/colorPrimary" />
 
     </LinearLayout>
@@ -127,7 +127,7 @@
                 app:dsb_allowTrackClickToDrag="false"
                 app:dsb_indicatorFormatter="%d Rounds"
                 app:dsb_indicatorTextAppearance="@style/CustomFloaterTextAppearance"
-                app:dsb_max="7"
+                app:dsb_max="10"
                 app:dsb_min="2"
                 app:dsb_progressColor="?attr/colorPrimary" />
 

@@ -10,7 +10,7 @@ public class LoginEvent extends BaseEvent {
     public int UserID = -1;
 
     public LoginEvent(String username) {
-        this.Type = EventType.LOGIN;
+        this.type = EventType.LOGIN;
         this.Username = username;
     }
 }

@@ -28,27 +28,14 @@ public class WebSocketClient {
 
     private static OkHttpClient client = new OkHttpClient();
     private static WebSocket ws;
-
-    /*
-    public static synchronized WebSocket getSocket(){
-        return ws;
-    }
-
-    public static synchronized OkHttpClient getClient() {
-        return client;
-    }
-
-    public static synchronized void setSocket(WebSocket socket){
-        WebSocketClient.ws = socket;
-    }
-
-    public static synchronized void setClient(OkHttpClient client) {
-        WebSocketClient.client = client;
-    }*/
+    private static boolean Connected = false;
 
     static void Connect() {
 
-        Request request = new Request.Builder().url("ws://139.84.185.87:5000").build();
+        if (Connected)
+            return;
+
+        Request request = new Request.Builder().url("ws://139.84.74.156:5000").build();
         ws = client.newWebSocket(request, new WebSocketListenerInterface());
         //client.dispatcher().executorService().shutdown();
     }
@@ -69,6 +56,7 @@ public class WebSocketClient {
         @Override
         public void onOpen(WebSocket webSocket, Response response) {
             //webSocket.close(NORMAL_CLOSURE_STATUS, "Goodbye !");
+            Connected = true;
         }
 
         @Override
@@ -78,26 +66,18 @@ public class WebSocketClient {
 
             Gson gson = new GsonBuilder().registerTypeAdapter(BaseEvent.class, new EventAdapter()).create();
             BaseEvent event = gson.fromJson(text, BaseEvent.class);
-            if (event instanceof BroadcastEvent) {
-                Log.d("test", "yes");
-            }
             EventBus.getDefault().post(event);
-        }
-
-        @Override
-        public void onMessage(WebSocket webSocket, ByteString bytes) {
-
         }
 
         @Override
         public void onClosing(WebSocket webSocket, int code, String reason) {
             webSocket.close(NORMAL_CLOSURE_STATUS, null);
-
+            Connected = false;
         }
 
         @Override
         public void onFailure(WebSocket webSocket, Throwable t, Response response) {
-
+            Connected = false;
         }
     }
 }

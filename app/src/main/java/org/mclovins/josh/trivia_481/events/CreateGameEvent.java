@@ -5,18 +5,19 @@ package org.mclovins.josh.trivia_481.events;
  */
 
 public class CreateGameEvent extends BaseEvent {
-    public String Username;
-    public String RoomName;
-    public int Time;
-    public int Rounds;
-    public int Players;
+
+    public String userName;
+    public String roomName;
+    public int time;
+    public int rounds;
+    public int players;
 
     public CreateGameEvent(String username, String roomName, int time, int rounds, int players) {
-        this.Type = EventType.CREATE_ROOM;
-        this.Username = username;
-        this.RoomName = roomName;
-        this.Time = time;
-        this.Rounds = rounds;
-        this.Players = players;
+        this.type = EventType.CREATE_GAME;
+        this.userName = username;
+        this.roomName = roomName;
+        this.time = time;
+        this.rounds = rounds;
+        this.players = players;
     }
 }
