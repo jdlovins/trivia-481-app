@@ -19,6 +19,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.mclovins.josh.trivia_481.dialogs.CreateGame;
 import org.mclovins.josh.trivia_481.dialogs.JoinGame;
+import org.mclovins.josh.trivia_481.events.CouldNotConnectEvent;
 import org.mclovins.josh.trivia_481.events.CreateGameEvent;
 import org.mclovins.josh.trivia_481.events.CreateGameResponseEvent;
 import org.mclovins.josh.trivia_481.events.JoinGameEvent;
@@ -101,12 +102,17 @@ public class MainActivity extends AppCompatActivity {
         if (event.success) {
             Intent myIntent = new Intent(getApplicationContext(), GameActivity.class);
             myIntent.putExtra("CODE", event.code);
-            myIntent.putExtra("CREATOR", true);
+            myIntent.putExtra("CREATOR", false);
             getApplicationContext().startActivity(myIntent);
         }
         else {
             showError(event.message);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCouldNotConnect(CouldNotConnectEvent event) {
+        showError("Could not connect to the game server!");
     }
 
     private void showError(String message) {

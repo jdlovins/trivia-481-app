@@ -60,6 +60,9 @@ public class GameActivity extends AppCompatActivity {
     PrimaryDrawerItem time_header = new PrimaryDrawerItem().withIdentifier(3).withName("Time").withSelectable(false);
     PrimaryDrawerItem code_header = new PrimaryDrawerItem().withIdentifier(4).withName("Code").withSelectable(false);
 
+    int maxPlayers = 0;
+    int currentPlayers = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,7 +124,10 @@ public class GameActivity extends AppCompatActivity {
                 Drawable icon = ResourcesCompat.getDrawable(getResources(), (player.creator ? R.drawable.ic_crown_white_24dp : R.drawable.ic_account_circle_white_24dp), null);
                 menu.addItem(new PrimaryDrawerItem().withIdentifier(identifier).withName(player.name).withSelectable(false).withIcon(icon));
                 playerItems.add(new MenuPlayerItem(player.name, identifier));
+                currentPlayers++;
             }
+
+            maxPlayers = event.maxPlayers;
 
         }else {
 
@@ -142,6 +148,7 @@ public class GameActivity extends AppCompatActivity {
         Drawable icon = ResourcesCompat.getDrawable(getResources(), (event.player.creator ? R.drawable.ic_crown_white_24dp : R.drawable.ic_account_circle_white_24dp), null);
         menu.addItem(new PrimaryDrawerItem().withIdentifier(identifier).withName(event.player.name).withSelectable(false).withIcon(icon));
         playerItems.add(new MenuPlayerItem(event.player.name, identifier));
+        UpdatePlayerCount(++currentPlayers);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -167,6 +174,8 @@ public class GameActivity extends AppCompatActivity {
         }
         if (toRemove != null)
             playerItems.remove(toRemove);
+
+        UpdatePlayerCount(--currentPlayers);
     }
 
     @Override
@@ -182,5 +191,10 @@ public class GameActivity extends AppCompatActivity {
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void UpdatePlayerCount(int newPlayerCount) {
+        players_header.withName(String.format(Locale.US,"Players [%d/%d]", newPlayerCount, maxPlayers));
+        menu.updateItem(players_header);
     }
 }

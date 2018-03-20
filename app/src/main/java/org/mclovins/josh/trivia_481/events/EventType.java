@@ -7,6 +7,7 @@ package org.mclovins.josh.trivia_481.events;
 public enum EventType {
     BASE("BASE"),
     CREATE_GAME("CREATE_GAME"),
+    CREATE_GAME_RESPONSE("CREATE_GAME_RESPONSE"),
     LOGIN("LOGIN"),
     BROADCAST("BROADCAST"),
     JOIN_GAME("JOIN_GAME"),

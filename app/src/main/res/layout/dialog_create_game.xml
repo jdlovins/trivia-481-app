@@ -15,7 +15,10 @@
             android:id="@+id/input_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Username" />
+            android:hint="Username"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -29,7 +32,10 @@
             android:id="@+id/input_room_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Room Name" />
+            android:hint="Room Name"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            />
 
     </android.support.design.widget.TextInputLayout>
 

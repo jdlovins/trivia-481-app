@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatDialogFragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -76,6 +77,12 @@ public class CreateGame extends AppCompatDialogFragment {
         // Listen for enter key to check the form
         etUsername.setOnKeyListener(KeyListener);
         etRoomName.setOnKeyListener(KeyListener);
+        etUsername.setOnEditorActionListener(SoftInputListener);
+        etRoomName.setOnEditorActionListener(SoftInputListener);
+
+        sbTime.setOnProgressChangeListener(ProgressChangedListener);
+        sbRounds.setOnProgressChangeListener(ProgressChangedListener);
+        sbPlayers.setOnProgressChangeListener(ProgressChangedListener);
 
         return builder.create();
     }
@@ -98,14 +105,42 @@ public class CreateGame extends AppCompatDialogFragment {
         @Override
         public boolean onKey(View view, int i, KeyEvent keyEvent) {
 
-            Toast.makeText(view.getContext(), "Key: " + i + " -- event: " + keyEvent.getAction(), Toast.LENGTH_SHORT).show();
-
             if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) &&
                     (i == KeyEvent.KEYCODE_ENTER)) {
                 CheckForm();
                 return true;
             }
             return false;
+        }
+    };
+
+    TextView.OnEditorActionListener SoftInputListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+            boolean handled = false;
+            if (i == EditorInfo.IME_ACTION_DONE) {
+                CheckForm();
+                handled = true;
+            }
+            return handled;
+        }
+    };
+
+    DiscreteSeekBar.OnProgressChangeListener ProgressChangedListener = new DiscreteSeekBar.OnProgressChangeListener() {
+        @Override
+        public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
+
+        }
+
+        @Override
+        public void onStartTrackingTouch(DiscreteSeekBar seekBar) {
+            InputMethodManager keyboard = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            keyboard.hideSoftInputFromWindow(seekBar.getWindowToken(), 0);
+        }
+
+        @Override
+        public void onStopTrackingTouch(DiscreteSeekBar seekBar) {
+
         }
     };
 

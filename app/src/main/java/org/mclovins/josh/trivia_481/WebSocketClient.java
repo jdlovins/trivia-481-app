@@ -8,6 +8,7 @@ import com.google.gson.GsonBuilder;
 import org.greenrobot.eventbus.EventBus;
 import org.mclovins.josh.trivia_481.events.BaseEvent;
 import org.mclovins.josh.trivia_481.events.BroadcastEvent;
+import org.mclovins.josh.trivia_481.events.CouldNotConnectEvent;
 import org.mclovins.josh.trivia_481.events.EventAdapter;
 import org.mclovins.josh.trivia_481.events.EventType;
 
@@ -35,7 +36,7 @@ public class WebSocketClient {
         if (Connected)
             return;
 
-        Request request = new Request.Builder().url("ws://10.10.10.14:5000").build();
+        Request request = new Request.Builder().url("wss://trivia-481.herokuapp.com").build();
         ws = client.newWebSocket(request, new WebSocketListenerInterface());
         //client.dispatcher().executorService().shutdown();
     }
@@ -60,6 +61,7 @@ public class WebSocketClient {
         public void onOpen(WebSocket webSocket, Response response) {
             //webSocket.close(NORMAL_CLOSURE_STATUS, "Goodbye !");
             Connected = true;
+            Log.d("Text", "Connected to web socket server");
         }
 
         @Override
@@ -81,6 +83,8 @@ public class WebSocketClient {
         @Override
         public void onFailure(WebSocket webSocket, Throwable t, Response response) {
             Connected = false;
+            EventBus.getDefault().post(new CouldNotConnectEvent());
+            Log.d("Text", "Disconnected from web socket server");
         }
     }
 }

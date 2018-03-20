@@ -9,9 +9,11 @@ import android.support.v7.app.AppCompatDialogFragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
@@ -65,6 +67,9 @@ public class JoinGame extends AppCompatDialogFragment {
         etUsername.setOnKeyListener(KeyListener);
         etRoomName.setOnKeyListener(KeyListener);
 
+        etUsername.setOnEditorActionListener(SoftInputListener);
+        etRoomName.setOnEditorActionListener(SoftInputListener);
+
         return builder.create();
     }
 
@@ -91,6 +96,18 @@ public class JoinGame extends AppCompatDialogFragment {
                 return true;
             }
             return false;
+        }
+    };
+
+    TextView.OnEditorActionListener SoftInputListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+            boolean handled = false;
+            if (i == EditorInfo.IME_ACTION_DONE) {
+                CheckForm();
+                handled = true;
+            }
+            return handled;
         }
     };
 
