@@ -17,4 +17,10 @@
         <item name="android:shadowDy">3</item>
     </style>
 
+    <style name="MyTheme" parent="MaterialDrawerTheme">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
 </resources>

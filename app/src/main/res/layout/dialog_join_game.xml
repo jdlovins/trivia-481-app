@@ -29,7 +29,7 @@
             android:id="@+id/input_room_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Room Name"
+            android:hint="Room Code"
             android:inputType="number"/>
 
     </android.support.design.widget.TextInputLayout>

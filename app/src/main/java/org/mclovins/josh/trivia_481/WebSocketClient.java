@@ -28,25 +28,28 @@ public class WebSocketClient {
 
     private static OkHttpClient client = new OkHttpClient();
     private static WebSocket ws;
-    private static boolean Connected = false;
+    public static boolean Connected = false;
 
     static void Connect() {
 
         if (Connected)
             return;
 
-        Request request = new Request.Builder().url("ws://139.84.74.156:5000").build();
+        Request request = new Request.Builder().url("ws://10.10.10.14:5000").build();
         ws = client.newWebSocket(request, new WebSocketListenerInterface());
         //client.dispatcher().executorService().shutdown();
     }
 
     static void Send(String message) {
-        ws.send(message);
+        if (ws != null)
+            ws.send(message);
     }
 
     static void Disconnect() {
-        ws.close(1000, "Goodbye !");
-        ws = null;
+        if (Connected) {
+            ws.close(1000, "Goodbye !");
+            ws = null;
+        }
     }
 
 

@@ -11,6 +11,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.github.clans.fab.FloatingActionMenu;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,8 +36,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.main_layout)
     ConstraintLayout content;
 
-    Animation slideUpAnimation, slideDownAnimation;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +43,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
 
-        slideUpAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
-                R.anim.slide_up);
+
 
     }
 
@@ -76,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (event.success) {
             Intent myIntent = new Intent(getApplicationContext(), GameActivity.class);
+            myIntent.putExtra("CODE", event.code);
+            myIntent.putExtra("CREATOR", true);
             getApplicationContext().startActivity(myIntent);
         }
         else {
@@ -99,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (event.success) {
             Intent myIntent = new Intent(getApplicationContext(), GameActivity.class);
+            myIntent.putExtra("CODE", event.code);
+            myIntent.putExtra("CREATOR", true);
             getApplicationContext().startActivity(myIntent);
         }
         else {

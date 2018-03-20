@@ -26,6 +26,12 @@ public class EventAdapter implements JsonDeserializer<BaseEvent> {
             return context.deserialize(jsonObject, BroadcastEvent.class);
         }else if (EventType.JOIN_GAME_RESPONSE == type) {
             return context.deserialize(jsonObject, JoinGameResponseEvent.class);
+        }else if (EventType.GAME_INFO_RESPONSE == type) {
+            return context.deserialize(jsonObject, GameInfoResponseEvent.class);
+        }else if (EventType.USER_JOIN == type) {
+            return context.deserialize(jsonObject, UserJoinEvent.class);
+        }else if (EventType.USER_LEFT == type) {
+            return context.deserialize(jsonObject, UserLeftEvent.class);
         }
 
         return null;
