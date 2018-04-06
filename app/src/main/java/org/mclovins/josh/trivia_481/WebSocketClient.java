@@ -36,7 +36,7 @@ public class WebSocketClient {
         if (Connected)
             return;
 
-        Request request = new Request.Builder().url("wss://trivia-481.herokuapp.com").build();
+        Request request = new Request.Builder().url("ws://139.84.74.131:5000").build();
         ws = client.newWebSocket(request, new WebSocketListenerInterface());
         //client.dispatcher().executorService().shutdown();
     }
@@ -71,6 +71,10 @@ public class WebSocketClient {
 
             Gson gson = new GsonBuilder().registerTypeAdapter(BaseEvent.class, new EventAdapter()).create();
             BaseEvent event = gson.fromJson(text, BaseEvent.class);
+            if (event == null) {
+                Log.d("text", "COULD NOT PARSE OUT THE EVENT!");
+                return;
+            }
             EventBus.getDefault().post(event);
         }
 
@@ -85,6 +89,14 @@ public class WebSocketClient {
             Connected = false;
             EventBus.getDefault().post(new CouldNotConnectEvent());
             Log.d("Text", "Disconnected from web socket server");
+            Log.d("text", t.getStackTrace().toString());
+
+            StackTraceElement elements[] = t.getStackTrace();
+            for (int i = 1; i < elements.length; i++) {
+                StackTraceElement s = elements[i];
+                 Log.d("text", "\tat " + s.getClassName() + "." + s.getMethodName()
+                        + "(" + s.getFileName() + ":" + s.getLineNumber() + ")");
+            }
         }
     }
 }

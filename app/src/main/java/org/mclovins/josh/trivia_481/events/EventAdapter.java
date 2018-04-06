@@ -20,20 +20,33 @@ public class EventAdapter implements JsonDeserializer<BaseEvent> {
 
         EventType type = EventType.valueOf(jsonObject.get("type").getAsString());
 
-        if (EventType.CREATE_GAME == type) {
-            return context.deserialize(jsonObject, CreateGameEvent.class);
-        }else if (EventType.CREATE_GAME_RESPONSE == type) {
-            return context.deserialize(jsonObject, CreateGameResponseEvent.class);
-        }else if (EventType.BROADCAST == type) {
-            return context.deserialize(jsonObject, BroadcastEvent.class);
-        }else if (EventType.JOIN_GAME_RESPONSE == type) {
-            return context.deserialize(jsonObject, JoinGameResponseEvent.class);
-        }else if (EventType.GAME_INFO_RESPONSE == type) {
-            return context.deserialize(jsonObject, GameInfoResponseEvent.class);
-        }else if (EventType.USER_JOIN == type) {
-            return context.deserialize(jsonObject, UserJoinEvent.class);
-        }else if (EventType.USER_LEFT == type) {
-            return context.deserialize(jsonObject, UserLeftEvent.class);
+        try {
+            if (EventType.CREATE_GAME == type) {
+                return context.deserialize(jsonObject, CreateGameEvent.class);
+            } else if (EventType.CREATE_GAME_RESPONSE == type) {
+                return context.deserialize(jsonObject, CreateGameResponseEvent.class);
+            } else if (EventType.BROADCAST == type) {
+                return context.deserialize(jsonObject, BroadcastEvent.class);
+            } else if (EventType.JOIN_GAME_RESPONSE == type) {
+                return context.deserialize(jsonObject, JoinGameResponseEvent.class);
+            } else if (EventType.GAME_INFO_RESPONSE == type) {
+                return context.deserialize(jsonObject, GameInfoResponseEvent.class);
+            } else if (EventType.USER_JOIN == type) {
+                return context.deserialize(jsonObject, UserJoinEvent.class);
+            } else if (EventType.USER_LEFT == type) {
+                return context.deserialize(jsonObject, UserLeftEvent.class);
+            } else if (EventType.UPDATE_PROGRESS == type){
+                return context.deserialize(jsonObject, UpdateProgressEvent.class);
+            } else if (EventType.GAME_COUNTDOWN_STARTED == type) {
+                return context.deserialize(jsonObject, GameCountdownEvent.class);
+            } else if (EventType.GAME_STARTED == type) {
+                return context.deserialize(jsonObject, GameStartedEvent.class);
+            } else if (EventType.QUESTION_INFO == type) {
+                return context.deserialize(jsonObject, QuestionInfoEvent.class);
+            } else if (EventType.UPDATE_PLAYER_LIST == type) {
+                return context.deserialize(jsonObject, UpdatePlayerListEvent.class);
+            }
+        } catch(Exception e) {
         }
 
         return null;

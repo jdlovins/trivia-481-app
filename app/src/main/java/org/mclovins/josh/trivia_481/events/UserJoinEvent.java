@@ -1,6 +1,6 @@
 package org.mclovins.josh.trivia_481.events;
 
-import org.mclovins.josh.trivia_481.PlayerInfo;
+import org.mclovins.josh.trivia_481.events.lists.PlayerInfo;
 
 /**
  * Created by Josh on 3/11/2018.

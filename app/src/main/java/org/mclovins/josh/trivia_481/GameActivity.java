@@ -6,8 +6,11 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
@@ -16,6 +19,7 @@ import org.mclovins.josh.trivia_481.events.*;
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.holder.ImageHolder;
 import com.mikepenz.materialdrawer.holder.StringHolder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
@@ -24,17 +28,16 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.mclovins.josh.trivia_481.events.lists.AnswerInfo;
+import org.mclovins.josh.trivia_481.events.lists.PlayerInfo;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -46,6 +49,24 @@ public class GameActivity extends AppCompatActivity {
 
     @BindView(R.id.pbMain)
     RoundCornerProgressBar pbMain;
+
+    @BindView(R.id.tvStatus)
+    TextView tvStatus;
+
+    @BindView(R.id.tvQuestion)
+    TextView tvQuestions;
+
+    @BindView(R.id.btnA)
+    Button btnA;
+
+    @BindView(R.id.btnB)
+    Button btnB;
+
+    @BindView(R.id.btnC)
+    Button btnC;
+
+    @BindView(R.id.btnD)
+    Button btnD;
 
     private static boolean shouldWeCloseNow;
     private Drawer menu;
@@ -63,6 +84,9 @@ public class GameActivity extends AppCompatActivity {
     int maxPlayers = 0;
     int currentPlayers = 0;
 
+    int currentQuestionPK = 0;
+    List<AnswerInfo> answerList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +101,7 @@ public class GameActivity extends AppCompatActivity {
 
         toolbar.setBackground(getResources().getDrawable(R.color.colorPrimary));
 
-
+        tvStatus.setText("Waiting for players...");
 
         menu = new DrawerBuilder()
                 .withActivity(this)
@@ -101,12 +125,19 @@ public class GameActivity extends AppCompatActivity {
                 .build();
         menu.setSelection(-1);
 
+        btnA.setOnClickListener(onButtonClick);
+        btnB.setOnClickListener(onButtonClick);
+        btnC.setOnClickListener(onButtonClick);
+        btnD.setOnClickListener(onButtonClick);
+
+        toggleButtons(false);
+
         WebSocketClient.Send(new GameInfoRequestEvent(code).toJson());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGameInfoResponse(GameInfoResponseEvent event) {
-
+        Log.d("text", "onGameInfoResponse called");
         if (event.success) {
             toolbar.setTitle(event.title);
             players_header.withName(String.format(Locale.US,"Players [%d/%d]", event.players.size(), event.maxPlayers));
@@ -122,8 +153,8 @@ public class GameActivity extends AppCompatActivity {
             for (PlayerInfo player : event.players) {
                 int identifier = playerItems.size() + 10;
                 Drawable icon = ResourcesCompat.getDrawable(getResources(), (player.creator ? R.drawable.ic_crown_white_24dp : R.drawable.ic_account_circle_white_24dp), null);
-                menu.addItem(new PrimaryDrawerItem().withIdentifier(identifier).withName(player.name).withSelectable(false).withIcon(icon));
-                playerItems.add(new MenuPlayerItem(player.name, identifier));
+                menu.addItem(new PrimaryDrawerItem().withIdentifier(identifier).withName(player.name + " - [0]").withSelectable(false).withIcon(icon));
+                playerItems.add(new MenuPlayerItem(player.name, identifier, player.points, player.creator));
                 currentPlayers++;
             }
 
@@ -147,7 +178,7 @@ public class GameActivity extends AppCompatActivity {
         int identifier = playerItems.size() + 10;
         Drawable icon = ResourcesCompat.getDrawable(getResources(), (event.player.creator ? R.drawable.ic_crown_white_24dp : R.drawable.ic_account_circle_white_24dp), null);
         menu.addItem(new PrimaryDrawerItem().withIdentifier(identifier).withName(event.player.name).withSelectable(false).withIcon(icon));
-        playerItems.add(new MenuPlayerItem(event.player.name, identifier));
+        playerItems.add(new MenuPlayerItem(event.player.name, identifier, 0, event.player.creator));
         UpdatePlayerCount(++currentPlayers);
     }
 
@@ -165,8 +196,7 @@ public class GameActivity extends AppCompatActivity {
 
                     MenuPlayerItem subItem = playerItems.get(i);
                     if (subItem.id > item.id) {
-                        subItem.id--;
-                        menu.updateName(subItem.id, new StringHolder(subItem.name));
+                        menu.updateName(--subItem.id, new StringHolder(subItem.name + " - [" + subItem.points + " points]"));
                     }
                 }
                 toRemove = item;
@@ -178,6 +208,134 @@ public class GameActivity extends AppCompatActivity {
         UpdatePlayerCount(--currentPlayers);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUpdatePlayerList(UpdatePlayerListEvent event) {
+        for (PlayerInfo pi : event.players) {
+            Log.d("text", "Got player update " + pi.name + " - " + pi.points);
+
+
+            for (MenuPlayerItem mpi : playerItems) {
+                if (pi.name.equals(mpi.name)) {
+                    mpi.points = pi.points;
+                }
+            }
+        }
+
+
+        int num = playerItems.size();
+        for (int i = 0; i < num; i++) {
+            for (int j = 1; j < num-i; j++) {
+                MenuPlayerItem c1 = playerItems.get(j-1);
+                MenuPlayerItem c2 = playerItems.get(j);
+
+                if (c1.points < c2.points) {
+                    long temp = c1.id;
+                    c1.id = c2.id;
+                    c2.id = temp;
+                }
+            }
+        }
+
+        for(MenuPlayerItem pi : playerItems) {
+            Drawable icon = ResourcesCompat.getDrawable(getResources(), (pi.creator ? R.drawable.ic_crown_white_24dp : R.drawable.ic_account_circle_white_24dp), null);
+            menu.updateName(pi.id, new StringHolder(pi.name + " - [" + pi.points + " points ]"));
+            menu.updateIcon(pi.id, new ImageHolder(icon));
+        }
+
+
+    }
+
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGameStarted(GameStartedEvent event) {
+        
+        pbMain.setMax(15);
+        pbMain.setProgress(15);
+
+        tvStatus.setText("Game Started!");
+        toggleButtons(true);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGameCountdown(GameCountdownEvent event) {
+        Log.d("Text", "Setting the progress bar max to 30");
+        pbMain.setMax(10);
+        pbMain.setProgress(10);
+
+        tvStatus.setText("Game starting soon...");
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUpdateProgress(UpdateProgressEvent event) {
+        pbMain.setProgress(event.progress);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onQuestInfo(QuestionInfoEvent event) {
+
+        currentQuestionPK = event.pk;
+        answerList = event.answers;
+
+        String text = event.question + "\n\n";
+
+        for(AnswerInfo i : event.answers) {
+            text += i.button + ": " + i.answer + "\n";
+        }
+
+        tvQuestions.setText(text);
+        toggleButtons(true);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCouldNotConnect(CouldNotConnectEvent event) {
+        finish();
+    }
+
+    View.OnClickListener onButtonClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            int pk = -1;
+            switch (view.getId()) {
+                case R.id.btnA:
+                    pk = findAnswerPKByButton("A");
+                    break;
+                case R.id.btnB:
+                    pk = findAnswerPKByButton("B");
+                    break;
+                case R.id.btnC:
+                    pk = findAnswerPKByButton("C");
+                    break;
+                case R.id.btnD:
+                    pk = findAnswerPKByButton("D");
+                    break;
+            }
+
+            toggleButtons(false);
+            Toast.makeText(getApplicationContext(), "We should send pk: " + pk, Toast.LENGTH_SHORT).show();
+
+            WebSocketClient.Send(new SendAnswerEvent(currentQuestionPK, pk).toJson());
+        }
+    };
+
+    private int findAnswerPKByButton(String button) {
+        for(AnswerInfo i : answerList) {
+            if (i.button.equals(button)) {
+                return i.pk;
+            }
+        }
+        return -1;
+    }
+
+    private void toggleButtons(boolean enabled) {
+
+        btnA.setEnabled(enabled);
+        btnB.setEnabled(enabled);
+        btnC.setEnabled(enabled);
+        btnD.setEnabled(enabled);
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
@@ -186,7 +344,9 @@ public class GameActivity extends AppCompatActivity {
                 Toast.makeText(this, "Press back 1 more time to exit", Toast.LENGTH_SHORT).show();
                 return false;
             } else {
+                Log.d("text", "Closing the activity");
                 WebSocketClient.Disconnect();
+                EventBus.getDefault().unregister(this);
                 finish();
             }
         }
