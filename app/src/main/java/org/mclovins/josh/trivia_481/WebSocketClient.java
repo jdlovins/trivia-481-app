@@ -36,7 +36,7 @@ public class WebSocketClient {
         if (Connected)
             return;
 
-        Request request = new Request.Builder().url("ws://139.84.74.131:5000").build();
+        Request request = new Request.Builder().url("ws://139.84.74.114:5000").build();
         ws = client.newWebSocket(request, new WebSocketListenerInterface());
         //client.dispatcher().executorService().shutdown();
     }

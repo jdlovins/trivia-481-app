@@ -47,11 +47,11 @@
 
     <TextView
         android:id="@+id/tvStatus"
-        android:layout_width="207dp"
-        android:layout_height="26dp"
-        android:layout_marginBottom="28dp"
-        android:layout_marginLeft="160dp"
+        android:layout_width="410dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="24dp"
         android:layout_weight="1"
+        android:gravity="center"
         android:text="Waiting for server..."
         app:layout_constraintBottom_toTopOf="@+id/pbMain"
         app:layout_constraintLeft_toLeftOf="parent" />

@@ -12,10 +12,12 @@ public class QuestionInfoEvent extends BaseEvent {
 
     public String question;
     public int pk;
+    public String category;
     public List<AnswerInfo> answers;
 
-    public QuestionInfoEvent(String question, int pk, List<AnswerInfo> info) {
+    public QuestionInfoEvent(String question, int pk, String category, List<AnswerInfo> info) {
         this.question = question;
+        this.category = category;
         this.pk = pk;
         this.answers = info;
     }

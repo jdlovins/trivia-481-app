@@ -30,9 +30,12 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.mclovins.josh.trivia_481.events.lists.AnswerInfo;
 import org.mclovins.josh.trivia_481.events.lists.PlayerInfo;
+import org.mclovins.josh.trivia_481.events.lists.RoundOverEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -153,7 +156,7 @@ public class GameActivity extends AppCompatActivity {
             for (PlayerInfo player : event.players) {
                 int identifier = playerItems.size() + 10;
                 Drawable icon = ResourcesCompat.getDrawable(getResources(), (player.creator ? R.drawable.ic_crown_white_24dp : R.drawable.ic_account_circle_white_24dp), null);
-                menu.addItem(new PrimaryDrawerItem().withIdentifier(identifier).withName(player.name + " - [0]").withSelectable(false).withIcon(icon));
+                menu.addItem(new PrimaryDrawerItem().withIdentifier(identifier).withName(player.name).withSelectable(false).withIcon(icon));
                 playerItems.add(new MenuPlayerItem(player.name, identifier, player.points, player.creator));
                 currentPlayers++;
             }
@@ -228,7 +231,7 @@ public class GameActivity extends AppCompatActivity {
                 MenuPlayerItem c1 = playerItems.get(j-1);
                 MenuPlayerItem c2 = playerItems.get(j);
 
-                if (c1.points < c2.points) {
+                if ((c1.points < c2.points) && (c1.id < c2.id)) {
                     long temp = c1.id;
                     c1.id = c2.id;
                     c2.id = temp;
@@ -275,10 +278,12 @@ public class GameActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onQuestInfo(QuestionInfoEvent event) {
 
+        Collections.sort(event.answers, new AnswerButtonCompare());
+
         currentQuestionPK = event.pk;
         answerList = event.answers;
 
-        String text = event.question + "\n\n";
+        String text = event.question + " ( " + event.category + " ) \n\n";
 
         for(AnswerInfo i : event.answers) {
             text += i.button + ": " + i.answer + "\n";
@@ -291,6 +296,22 @@ public class GameActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCouldNotConnect(CouldNotConnectEvent event) {
         finish();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUpdateProgressMax(UpdateProgressMaxEvent event) {
+        pbMain.setMax(event.max);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUpdateStatusMessage(UpdateStatusMessageEvent event) {
+        tvStatus.setText(event.message);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRoundOver(RoundOverEvent event) {
+        toggleButtons(false);
+        tvQuestions.setText("");
     }
 
     View.OnClickListener onButtonClick = new View.OnClickListener() {
@@ -351,6 +372,14 @@ public class GameActivity extends AppCompatActivity {
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    class AnswerButtonCompare implements Comparator<AnswerInfo> {
+        @Override
+        public int compare(AnswerInfo o1, AnswerInfo o2) {
+
+            return o1.button.compareTo(o2.button);
+        }
     }
 
     private void UpdatePlayerCount(int newPlayerCount) {

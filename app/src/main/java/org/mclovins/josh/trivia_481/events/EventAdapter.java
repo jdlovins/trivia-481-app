@@ -6,6 +6,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
+import org.mclovins.josh.trivia_481.events.lists.RoundOverEvent;
+
 import java.lang.reflect.Type;
 
 /**
@@ -45,7 +47,14 @@ public class EventAdapter implements JsonDeserializer<BaseEvent> {
                 return context.deserialize(jsonObject, QuestionInfoEvent.class);
             } else if (EventType.UPDATE_PLAYER_LIST == type) {
                 return context.deserialize(jsonObject, UpdatePlayerListEvent.class);
+            } else if (EventType.UPDATE_STATUS_MESSAGE == type) {
+                return context.deserialize(jsonObject, UpdateStatusMessageEvent.class);
+            } else if (EventType.UPDATE_PROGRESS_MAX == type){
+                return context.deserialize(jsonObject, UpdateProgressMaxEvent.class);
+            } else if (EventType.ROUND_OVER == type) {
+                return context.deserialize(jsonObject, RoundOverEvent.class);
             }
+
         } catch(Exception e) {
         }
 
