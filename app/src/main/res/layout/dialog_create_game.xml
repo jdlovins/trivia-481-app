@@ -66,8 +66,8 @@
             app:dsb_allowTrackClickToDrag="false"
             app:dsb_indicatorFormatter="%d Seconds"
             app:dsb_indicatorTextAppearance="@style/CustomFloaterTextAppearance"
-            app:dsb_max="60"
-            app:dsb_min="20"
+            app:dsb_max="20"
+            app:dsb_min="5"
             app:dsb_progressColor="?attr/colorPrimary" />
 
     </LinearLayout>

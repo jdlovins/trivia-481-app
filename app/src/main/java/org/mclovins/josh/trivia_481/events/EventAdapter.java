@@ -53,6 +53,8 @@ public class EventAdapter implements JsonDeserializer<BaseEvent> {
                 return context.deserialize(jsonObject, UpdateProgressMaxEvent.class);
             } else if (EventType.ROUND_OVER == type) {
                 return context.deserialize(jsonObject, RoundOverEvent.class);
+            } else if (EventType.UPDATE_LOG == type) {
+                return context.deserialize(jsonObject, UpdateLogEvent.class);
             }
 
         } catch(Exception e) {

@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AbsoluteLayout;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
@@ -58,6 +60,9 @@ public class GameActivity extends AppCompatActivity {
 
     @BindView(R.id.tvQuestion)
     TextView tvQuestions;
+
+    @BindView(R.id.tvLog)
+    TextView tvLog;
 
     @BindView(R.id.btnA)
     Button btnA;
@@ -132,6 +137,9 @@ public class GameActivity extends AppCompatActivity {
         btnB.setOnClickListener(onButtonClick);
         btnC.setOnClickListener(onButtonClick);
         btnD.setOnClickListener(onButtonClick);
+
+        tvLog.setText("");
+        tvQuestions.setText("");
 
         toggleButtons(false);
 
@@ -235,6 +243,7 @@ public class GameActivity extends AppCompatActivity {
                     long temp = c1.id;
                     c1.id = c2.id;
                     c2.id = temp;
+                    Collections.swap(playerItems, j -1, j);
                 }
             }
         }
@@ -312,6 +321,11 @@ public class GameActivity extends AppCompatActivity {
     public void onRoundOver(RoundOverEvent event) {
         toggleButtons(false);
         tvQuestions.setText("");
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUpdateLog(UpdateLogEvent event) {
+        tvLog.append(event.message);
     }
 
     View.OnClickListener onButtonClick = new View.OnClickListener() {
