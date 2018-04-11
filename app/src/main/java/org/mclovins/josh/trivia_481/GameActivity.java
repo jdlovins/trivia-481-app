@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -43,6 +44,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -75,6 +77,9 @@ public class GameActivity extends AppCompatActivity {
 
     @BindView(R.id.btnD)
     Button btnD;
+
+    @BindView(R.id.btnStartGame)
+    Button btnStartGame;
 
     private static boolean shouldWeCloseNow;
     private Drawer menu;
@@ -141,7 +146,12 @@ public class GameActivity extends AppCompatActivity {
         tvLog.setText("");
         tvQuestions.setText("");
 
+        tvLog.setMovementMethod(new ScrollingMovementMethod());
+        tvLog.clearFocus();
+
         toggleButtons(false);
+
+        btnStartGame.setVisibility( creator ? View.VISIBLE : View.INVISIBLE );
 
         WebSocketClient.Send(new GameInfoRequestEvent(code).toJson());
     }
@@ -276,7 +286,7 @@ public class GameActivity extends AppCompatActivity {
         pbMain.setProgress(10);
 
         tvStatus.setText("Game starting soon...");
-
+        btnStartGame.setVisibility(View.INVISIBLE);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -326,6 +336,16 @@ public class GameActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUpdateLog(UpdateLogEvent event) {
         tvLog.append(event.message);
+    }
+
+    @OnClick(R.id.btnStartGame)
+    public void onBtnStartGameClick() {
+        if (playerItems.size() >= 2) {
+            WebSocketClient.Send(new StartGameEvent(code).toJson());
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Not enough users to start a game!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     View.OnClickListener onButtonClick = new View.OnClickListener() {

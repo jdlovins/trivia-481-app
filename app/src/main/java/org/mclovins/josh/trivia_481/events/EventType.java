@@ -25,7 +25,8 @@ public enum EventType {
     UPDATE_PROGRESS_MAX("UPDATE_PROGRESS_MAX"),
     UPDATE_STATUS_MESSAGE("UPDATE_STATUS_MESSAGE"),
     ROUND_OVER("ROUND_OVER"),
-    UPDATE_LOG("UPDATE_LOG")
+    UPDATE_LOG("UPDATE_LOG"),
+    START_GAME("START_GAME")
     ;
 
     private final String text;
