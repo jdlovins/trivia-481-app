@@ -59,7 +59,7 @@
     <TextView
         android:id="@+id/tvQuestion"
         android:layout_width="match_parent"
-        android:layout_height="116dp"
+        android:layout_height="150dp"
         android:layout_marginLeft="4dp"
         android:layout_marginTop="76dp"
         android:text="TextView"
@@ -68,13 +68,13 @@
 
     <TextView
         android:id="@+id/tvLog"
-        android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:layout_marginTop="212dp"
+        android:layout_width="572dp"
+        android:layout_height="176dp"
+        android:layout_marginTop="256dp"
         android:maxLines="5"
         android:scrollbars="vertical"
         android:text="TextView"
-        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintHorizontal_bias="0.571"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/linearLayout4" />

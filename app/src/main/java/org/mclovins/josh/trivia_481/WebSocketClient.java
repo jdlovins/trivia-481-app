@@ -36,7 +36,7 @@ public class WebSocketClient {
         if (Connected)
             return;
 
-        Request request = new Request.Builder().url("ws://139.84.74.183:5000").build();
+        Request request = new Request.Builder().url("ws://trivia.apps.resurfed.xyz").build();
         ws = client.newWebSocket(request, new WebSocketListenerInterface());
         //client.dispatcher().executorService().shutdown();
     }

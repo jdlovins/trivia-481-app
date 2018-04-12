@@ -302,7 +302,7 @@ public class GameActivity extends AppCompatActivity {
         currentQuestionPK = event.pk;
         answerList = event.answers;
 
-        String text = event.question + " ( " + event.category + " ) \n\n";
+        String text = "---   " +  event.category + "  ---\n\n" + event.question + "\n\n";
 
         for(AnswerInfo i : event.answers) {
             text += i.button + ": " + i.answer + "\n";
@@ -330,7 +330,6 @@ public class GameActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRoundOver(RoundOverEvent event) {
         toggleButtons(false);
-        tvQuestions.setText("");
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -368,7 +367,6 @@ public class GameActivity extends AppCompatActivity {
             }
 
             toggleButtons(false);
-            Toast.makeText(getApplicationContext(), "We should send pk: " + pk, Toast.LENGTH_SHORT).show();
 
             WebSocketClient.Send(new SendAnswerEvent(currentQuestionPK, pk).toJson());
         }
